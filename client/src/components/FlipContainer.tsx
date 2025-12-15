@@ -49,24 +49,37 @@ export const FlipContainer: React.FC<FlipContainerProps> = ({ sections }) => {
 };
 
 const FlipCard = ({ index, data, progress, total }: { index: number, data: any, progress: any, total: number }) => {
+  // Flip "Forward" by rotating 0 -> 180 (positive)
   const rotateX = useTransform(
     progress,
     [index, index + 1],
-    [0, -180]
+    [0, 180]
+  );
+  
+  // Add a slight skew to simulate paper curling/distortion
+  // Peaks in the middle of the animation
+  const skewX = useTransform(
+    progress,
+    [index, index + 0.5, index + 1],
+    [0, -10, 0]
+  );
+
+  // Add a slight rotation on Y to make it less perfect/mechanical
+  const rotateY = useTransform(
+    progress,
+    [index, index + 1],
+    [0, -5]
   );
   
   const zIndex = total - index;
-  
-  // Add a shadow that gets stronger as it lifts, then disappears when fully flipped?
-  // Or just a constant shadow that moves with it.
-  // drop-shadow is expensive.
-  // Let's use a simple border or gradient to define edges.
 
   return (
     <motion.div
       style={{ 
         zIndex,
         rotateX,
+        skewX,
+        rotateY,
         transformOrigin: "top center",
       }}
       className="absolute inset-0 w-full h-full backface-hidden transform-style-3d will-change-transform shadow-2xl"
