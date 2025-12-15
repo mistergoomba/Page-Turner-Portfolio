@@ -48,7 +48,8 @@ export default function Home() {
       id: 'contact',
       subtitle: 'Get in Touch',
       title: 'Collaborate',
-      description: 'All these are ideas thrown in to start the creative process.',
+      description:
+        'All these are ideas thrown in to start the creative process. We can work on design, colors, fonts, and trippy ideas.',
       theme: 'light' as const,
       align: 'center' as const,
       // No image for last slide, just clean light theme

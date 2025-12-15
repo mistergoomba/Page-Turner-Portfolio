@@ -30,10 +30,10 @@ export const FlipContainer: React.FC<FlipContainerProps> = ({ sections }) => {
   return (
     <div
       ref={containerRef}
-      style={{ height: `${totalSections * 100}dvh` }}
+      style={{ height: `${totalSections * 100}svh` }}
       className='relative bg-black'
     >
-      <div className='sticky top-0 h-dvh w-full overflow-hidden perspective-1000'>
+      <div className='sticky top-0 h-svh w-full overflow-hidden perspective-1000'>
         {sections.map((sectionData, index) => (
           <FlipCard
             key={index}
@@ -62,29 +62,29 @@ const FlipCard = ({
   // Simulate a "Page Peel" from the bottom-right corner.
   // We anchor at the Bottom-Left (spine) and rotate/lift.
 
-  // 1. The main Flip (Page Turn)
+  // 1. The main Flip (Page Turn) - starts 30% earlier
   const rotateY = useTransform(
     progress,
-    [index, index + 1],
+    [index - 0.3, index + 0.7],
     [0, -180] // Flips to the left
   );
 
-  // 2. The "Lift" (Corner tilt)
+  // 2. The "Lift" (Corner tilt) - starts 30% earlier
   // As we start flipping, we tilt the page up slightly to simulate lifting from the bottom corner.
   const rotateZ = useTransform(
     progress,
-    [index, index + 0.5, index + 1],
+    [index - 0.3, index + 0.2, index + 0.7],
     [0, -15, 0] // Arcs up then flattens
   );
 
-  // 3. The "Bend" (Skew)
+  // 3. The "Bend" (Skew) - starts 30% earlier
   // Distorts the page slightly to make it feel flexible like paper
-  const skewY = useTransform(progress, [index, index + 0.5, index + 1], [0, 5, 0]);
+  const skewY = useTransform(progress, [index - 0.3, index + 0.2, index + 0.7], [0, 5, 0]);
 
   // Visibility optimization:
-  // When the card is fully flipped (progress > index + 1), hide it to prevent z-fighting/visual glitches.
+  // When the card is fully flipped (progress > index + 0.7), hide it to prevent z-fighting/visual glitches.
   const display = useTransform(progress, (value) =>
-    (value as number) >= index + 0.4 ? 'none' : 'block'
+    (value as number) >= index + 0.7 ? 'none' : 'block'
   );
 
   const zIndex = total - index;
