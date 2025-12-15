@@ -56,13 +56,6 @@ const FlipCard = ({ index, data, progress, total }: { index: number, data: any, 
     [0, 180]
   );
   
-  // Add a slight rotation on Y to make it less perfect/mechanical
-  const rotateY = useTransform(
-    progress,
-    [index, index + 1],
-    [0, -5]
-  );
-  
   const zIndex = total - index;
 
   return (
@@ -70,7 +63,6 @@ const FlipCard = ({ index, data, progress, total }: { index: number, data: any, 
       style={{ 
         zIndex,
         rotateX,
-        rotateY,
         transformOrigin: "top center",
       }}
       className="absolute inset-0 w-full h-full backface-hidden transform-style-3d will-change-transform shadow-2xl"
