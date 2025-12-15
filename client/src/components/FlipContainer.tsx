@@ -56,14 +56,6 @@ const FlipCard = ({ index, data, progress, total }: { index: number, data: any, 
     [0, 180]
   );
   
-  // Add a slight skew to simulate paper curling/distortion
-  // Peaks in the middle of the animation
-  const skewX = useTransform(
-    progress,
-    [index, index + 0.5, index + 1],
-    [0, -10, 0]
-  );
-
   // Add a slight rotation on Y to make it less perfect/mechanical
   const rotateY = useTransform(
     progress,
@@ -78,7 +70,6 @@ const FlipCard = ({ index, data, progress, total }: { index: number, data: any, 
       style={{ 
         zIndex,
         rotateX,
-        skewX,
         rotateY,
         transformOrigin: "top center",
       }}
