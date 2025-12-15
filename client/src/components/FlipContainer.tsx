@@ -75,6 +75,13 @@ const FlipCard = ({ index, data, progress, total }: { index: number, data: any, 
     [0, 5, 0]
   );
   
+  // Visibility optimization:
+  // When the card is fully flipped (progress > index + 1), hide it to prevent z-fighting/visual glitches.
+  const display = useTransform(
+    progress,
+    (value) => (value > index + 1 ? "none" : "block")
+  );
+
   const zIndex = total - index;
 
   return (
@@ -84,6 +91,7 @@ const FlipCard = ({ index, data, progress, total }: { index: number, data: any, 
         rotateY,
         rotateZ,
         skewY,
+        display,
         transformOrigin: "0% 100%", // Bottom Left Anchor
       }}
       className="absolute inset-0 w-full h-full backface-hidden transform-style-3d will-change-transform shadow-2xl"
