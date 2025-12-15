@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
 import { Section } from './FlipSection';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface FlipContainerProps {
   sections: Array<React.ComponentProps<typeof Section>>;
@@ -62,29 +63,35 @@ const FlipCard = ({
   // Simulate a "Page Peel" from the bottom-right corner.
   // We anchor at the Bottom-Left (spine) and rotate/lift.
 
-  // 1. The main Flip (Page Turn) - starts 30% earlier
+  // First section (index 0) uses original timing, others start 30% earlier
+  const flipStart = index === 0 ? index : index - 0.3;
+  const flipMid = index === 0 ? index + 0.5 : index + 0.2;
+  const flipEnd = index === 0 ? index + 1 : index + 0.7;
+  const hideAt = index === 0 ? index + 0.5 : index + 0.1;
+
+  // 1. The main Flip (Page Turn)
   const rotateY = useTransform(
     progress,
-    [index - 0.3, index + 0.7],
+    [flipStart, flipEnd],
     [0, -180] // Flips to the left
   );
 
-  // 2. The "Lift" (Corner tilt) - starts 30% earlier
+  // 2. The "Lift" (Corner tilt)
   // As we start flipping, we tilt the page up slightly to simulate lifting from the bottom corner.
   const rotateZ = useTransform(
     progress,
-    [index - 0.3, index + 0.2, index + 0.7],
+    [flipStart, flipMid, flipEnd],
     [0, -15, 0] // Arcs up then flattens
   );
 
-  // 3. The "Bend" (Skew) - starts 30% earlier
+  // 3. The "Bend" (Skew)
   // Distorts the page slightly to make it feel flexible like paper
-  const skewY = useTransform(progress, [index - 0.3, index + 0.2, index + 0.7], [0, 5, 0]);
+  const skewY = useTransform(progress, [flipStart, flipMid, flipEnd], [0, 5, 0]);
 
   // Visibility optimization:
-  // When the card is fully flipped (progress > index + 0.7), hide it to prevent z-fighting/visual glitches.
+  // When the card is fully flipped, hide it to prevent z-fighting/visual glitches.
   const display = useTransform(progress, (value) =>
-    (value as number) >= index + 0.7 ? 'none' : 'block'
+    (value as number) >= hideAt ? 'none' : 'block'
   );
 
   const zIndex = total - index;
