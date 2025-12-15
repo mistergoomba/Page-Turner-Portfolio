@@ -79,7 +79,7 @@ const FlipCard = ({ index, data, progress, total }: { index: number, data: any, 
   // When the card is fully flipped (progress > index + 1), hide it to prevent z-fighting/visual glitches.
   const display = useTransform(
     progress,
-    (value) => (value as number) >= index + 0.5 ? "none" : "block"
+    (value) => (value as number) >= index + 0.4 ? "none" : "block"
   );
 
   const zIndex = total - index;
