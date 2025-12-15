@@ -49,11 +49,30 @@ export const FlipContainer: React.FC<FlipContainerProps> = ({ sections }) => {
 };
 
 const FlipCard = ({ index, data, progress, total }: { index: number, data: any, progress: any, total: number }) => {
-  // Flip "Forward" by rotating 0 -> 180 (positive)
-  const rotateX = useTransform(
+  // Simulate a "Page Peel" from the bottom-right corner.
+  // We anchor at the Bottom-Left (spine) and rotate/lift.
+  
+  // 1. The main Flip (Page Turn)
+  const rotateY = useTransform(
     progress,
     [index, index + 1],
-    [0, 180]
+    [0, -180] // Flips to the left
+  );
+
+  // 2. The "Lift" (Corner tilt)
+  // As we start flipping, we tilt the page up slightly to simulate lifting from the bottom corner.
+  const rotateZ = useTransform(
+    progress,
+    [index, index + 0.5, index + 1],
+    [0, -15, 0] // Arcs up then flattens
+  );
+
+  // 3. The "Bend" (Skew)
+  // Distorts the page slightly to make it feel flexible like paper
+  const skewY = useTransform(
+    progress,
+    [index, index + 0.5, index + 1],
+    [0, 5, 0]
   );
   
   const zIndex = total - index;
@@ -62,8 +81,10 @@ const FlipCard = ({ index, data, progress, total }: { index: number, data: any, 
     <motion.div
       style={{ 
         zIndex,
-        rotateX,
-        transformOrigin: "top center",
+        rotateY,
+        rotateZ,
+        skewY,
+        transformOrigin: "0% 100%", // Bottom Left Anchor
       }}
       className="absolute inset-0 w-full h-full backface-hidden transform-style-3d will-change-transform shadow-2xl"
     >
