@@ -64,7 +64,7 @@ const FlipCard = ({
   // We anchor at the Bottom-Left (spine) and rotate/lift.
 
   // First section (index 0) uses original timing, others start 30% earlier
-  const flipStart = index === 0 ? index : index - 0.3;
+  const flipStart = index === 0 ? index : index - 0.6;
   const flipMid = index === 0 ? index + 0.5 : index + 0.2;
   const flipEnd = index === 0 ? index + 1 : index + 0.7;
   const hideAt = index === 0 ? index + 0.5 : index + 0.1;
